@@ -1,0 +1,13 @@
+tensorflow>=2.12
+opencv-python
+numpy
+scikit-learn
+flask
+flask-jwt-extended
+pyyaml
+pillow
+tqdm
+python-dotenv
+cryptography
+faiss-cpu           # fast nearest-neighbor search (or use scikit-learn's NearestNeighbors)
+gunicorn
