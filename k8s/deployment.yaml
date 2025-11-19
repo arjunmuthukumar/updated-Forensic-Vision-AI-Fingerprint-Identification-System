@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forensic-vision
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: forensic-vision
+  template:
+    metadata:
+      labels:
+        app: forensic-vision
+    spec:
+      containers:
+      - name: app
+        image: your-registry/forensic-vision:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: fv-secrets
+              key: jwt_secret
+        - name: MASTER_KEY_B64
+          valueFrom:
+            secretKeyRef:
+              name: fv-secrets
+              key: master_key_b64
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forensic-vision-svc
+spec:
+  selector:
+    app: forensic-vision
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  type: ClusterIP
